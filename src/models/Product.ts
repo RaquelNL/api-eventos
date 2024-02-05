@@ -14,6 +14,7 @@ export class Product {
         public price: number,
         public id?: number
     ){
+        if(id) this._id = new ObjectId(id);
     }
     async save(){
         if(this._id){
@@ -22,11 +23,13 @@ export class Product {
                 ? console.log(`Successfully updated product with id ${this._id}`)
                 : console.log("Failed to create a new product.");
             return;
+        }else{
+            const result = await collections.products?.insertOne(this);
+            result
+                    ? console.log(`Successfully created a new product with id ${result.insertedId}`)
+                    : console.log("Failed to create a new product.");
         }
-        const result = await collections.products?.insertOne(this);
-        result
-                ? console.log(`Successfully created a new product with id ${result.insertedId}`)
-                : console.log("Failed to create a new product.");
+        
         // if(!this.id){
         //     this.id = Math.round(Math.random()*1000000);
         //     products.push(this);

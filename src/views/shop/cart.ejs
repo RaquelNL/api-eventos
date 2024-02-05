@@ -19,22 +19,22 @@
                 acumulado += it.price*it.qty;
             %>
                 <tr>
-                    <td ><%= it.id %></td>
+                    <td ><%= it._id %></td>
                     <td><%= it.title %></td>
                     <td><%= it.price %></td>
                     <td><%= it.qty %></td>
                     <td><%= it.price*it.qty %></td>
                     <td>
                         <form action="/cart-delete-item" method="post">
-                            <input type="hidden" value="<%= it.id %>" name="productId">
+                            <input type="hidden" value="<%= it._id %>" name="productId">
                             <button class="btn" type="submit">Delete</button>
                         </form>
                         <form action="/cart-increase-item" method="post">
-                            <input type="hidden" value="<%= it.id %>" name="productId">
+                            <input type="hidden" value="<%= it._id %>" name="productId">
                             <button class="btn" type="submit"> + </button>
                         </form>
                         <form action="/cart-decrease-item" method="post">
-                            <input type="hidden" value="<%= it.id %>" name="productId">
+                            <input type="hidden" value="<%= it._id %>" name="productId">
                             <button class="btn" type="submit"> - </button>
                         </form>
                     </td>

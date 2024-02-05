@@ -5,7 +5,7 @@ import { User } from "./models/User.js";
 import { rutas } from "./utils/rutas.js";
 import { adminRouter } from "./routes/adminRoutes.js";
 import { shopRouter } from "./routes/shopRoutes.js";
-import { connectToDatabase } from "./services/databaseService.js";
+import { collections, connectToDatabase } from "./services/databaseService.js";
 
 console.log('------------------------------------------------------------_---');
 console.log("Bienvenido a mi app");
@@ -28,7 +28,16 @@ connectToDatabase()
     app.use(express.static(rutas.public)); //Mia rutas contenido estáticos .css .js
     app.disable('x-powered-by');
     app.set('view engine', 'ejs');
-    app.set('views',rutas.views); //CAMBIAR
+    app.set('views',rutas.views); 
+    app.use(
+        //Este middleware simula que se ha loggeado un usuario
+        //Este es el usuario que se utilizará en los métodos de la tienda. En el futuro se sustituirá con el proceso de login
+        async (req, res, next) => {
+            const user = await collections.users?.findOne({'DNI': '123456789'});
+            req.body.user = new User(user!.DNI,user!.name, user!.mail, user!.contacto, user!.cart, user!._id.toHexString()); 
+            next();  
+        }
+    );
 
     app.use('/admin', adminRouter); //Las rutas empiezan por /admin
     app.use('/', shopRouter);
