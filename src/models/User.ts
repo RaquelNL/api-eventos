@@ -89,7 +89,7 @@ export class User {
             else{
                 this.cart[index].qty -= 1;
             }
-            return collections.products?.updateOne({_id: this._id},{$set: {cart: this.cart}});
+            return await collections.users?.updateOne({_id: this._id},{$set: {cart: this.cart}});
         }else{
             return
         }

@@ -54,26 +54,24 @@ export const deleteCartItem = async (req: Request,res: Response,next: NextFuncti
     const user = req.body.user;
     const productId = req.body.productId;
     const result = await user.deleteCartItem(productId);
-    result
-        ? console.log("Producto eliminado: ", productId)
-        : console.log("No ha funcionado: ", productId);
+    
     res.redirect('/cart');
 }
-//     const productId = +req.body.productId;
-//     Cart.deleteProduct(productId);
-//     res.redirect('/cart');
-// };
-// export const postCartIncreaseItem = (req: Request,res: Response,next: NextFunction)=>{
-//     const productId = +req.body.productId;
-//     Cart.addProduct(productId,1);
-//     res.redirect('/cart');
-// };
 
-// export const postCartDecreaseItem = (req: Request,res: Response,next: NextFunction)=>{
-//     const productId = +req.body.productId;
-//     Cart.decreaseProduct(productId);
-//     res.redirect('/cart');
-// };
+
+export const postCartIncreaseItem = async (req: Request,res: Response,next: NextFunction)=>{
+    const user = req.body.user;
+    const productId = req.body.productId;
+    await user.addToCart(productId);
+    res.redirect('/cart');
+};
+
+export const postCartDecreaseItem = async (req: Request,res: Response,next: NextFunction)=>{
+    const user = req.body.user;
+    const productId = req.body.productId;
+    await user.decreaseCartItem(productId);
+    res.redirect('/cart');
+};
 
 // export const getSaludo = (req: Request,res: Response,next: NextFunction)=>{
 //     res.render('prueba',{nombre: 'Ico'});
