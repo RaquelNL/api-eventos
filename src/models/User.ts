@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb"
 
 import { collections } from "../services/databaseService.js";
+import { Order } from "./Orders.js";
 
 
 interface address {
@@ -93,5 +94,33 @@ export class User {
         }else{
             return
         }
-    }
+    };
+    async addOrder(){
+        if(this.cart.length > 0 && this._id){
+            const prodsId = this.cart.map( ci => ci.pid ); //Listado de todos los ids de los productos que tengo en el cart
+            const products = await collections.products?.find({_id: {$in: prodsId}}).toArray();
+            if(products){
+                const items = products.map( p => {
+                    return {
+                        product: p,
+                        qty: this.cart.find( ci => ci.pid.toHexString() === p._id.toHexString())!.qty
+                    }
+                }) 
+            
+                const time = new Date();
+                this.cart = [];
+                const result = await collections.users!.updateOne({_id: this._id},{$set:{cart: []}});
+                result
+                        ? console.log('UpdateCart: ',result)
+                        : console.log('Cart no vaciado');
+                const newOrder: Order = {user: this, date: time, items: items};
+                return await collections.orders?.insertOne(newOrder);
+            }
+        } else {
+            return null
+        }
+    };
+    async getOrders(){
+        return await collections.orders?.find({'user._id': this._id}).toArray();
+    };
 }

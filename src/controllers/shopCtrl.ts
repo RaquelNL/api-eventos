@@ -72,6 +72,29 @@ export const postCartDecreaseItem = async (req: Request,res: Response,next: Next
     await user.decreaseCartItem(productId);
     res.redirect('/cart');
 };
+export const getOrders = async (req: Request,res: Response,next: NextFunction)=>{
+    const user = req.body.user;
+    const orders = await user.getOrders();
+    res.render('shop/orders', {
+        pageTitle:'Orders',
+        path:'/orders',
+        user: {name: user.name, DNI: user.DNI},
+        orders: orders,
+    });
+}
+export const getCheckOut = async (req: Request,res: Response,next: NextFunction)=>{
+    const user = req.body.user;
+    try{
+        const result = await user.addOrder();
+        result 
+            ? console.log("Orden añadida: ", result)
+            : console.log("Error en la order");
+    }catch(err){
+        console.log(err);
+    }finally{
+        res.redirect('/orders');
+    }
+}
 
 // export const getSaludo = (req: Request,res: Response,next: NextFunction)=>{
 //     res.render('prueba',{nombre: 'Ico'});

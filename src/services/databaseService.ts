@@ -4,10 +4,12 @@ import * as dotenv from 'dotenv';
 
 import { Product } from '../models/Product.js';
 import { User } from '../models/User.js';
+import { Order } from '../models/Orders.js';
 
 export const collections: {
     products?: mongoDB.Collection<Product>,
     users?: mongoDB.Collection<User>,
+    orders?: mongoDB.Collection<Order>
 } = {};
 
 export async function connectToDatabase(){
@@ -18,10 +20,12 @@ export async function connectToDatabase(){
 
     collections.products = db.collection<Product>(process.env.PRODUCT_COLLECTION!);
     collections.users = db.collection<User>(process.env.USER_COLLECTION!);
+    collections.orders = db.collection<Order>(process.env.ORDER_COLLECTION!);
     
 
     console.log(`Hemos conectado a la base de datos: ${db.databaseName} y la colección: ${collections.products.collectionName}`);
     console.log(`Hemos conectado a la base de datos: ${db.databaseName} y la colección: ${collections.users.collectionName}`);
+    console.log(`Hemos conectado a la base de datos: ${db.databaseName} y la colección: ${collections.orders.collectionName}`);
 }
 
 
