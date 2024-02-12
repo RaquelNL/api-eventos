@@ -7,9 +7,12 @@ import { adminRouter } from "./routes/adminRoutes.js";
 import { shopRouter } from "./routes/shopRoutes.js";
 import { collections, connectToDatabase } from "./services/databaseService.js";
 
-console.log('------------------------------------------------------------_---');
+console.log('---------------------------------------------------------------');
 console.log("Bienvenido a mi app");
 dotenv.config();
+let prueba = '        Esto es una prueba';
+
+console.log(prueba);
 
 const port =  process.env.PORT || 3000;
 
@@ -20,6 +23,7 @@ connectToDatabase()
 {
     const user = new User('123456789', 'Mateo', 'mateo@a.com',{calle: 'a', telf: '555', CP: '46000'});
     await user.save();
+    prueba='             Ya tenemos user';
 })
 .then( () => {
     console.log('Funciona');
@@ -29,6 +33,7 @@ connectToDatabase()
     app.disable('x-powered-by');
     app.set('view engine', 'ejs');
     app.set('views',rutas.views); 
+    prueba='            Ya tenemos los views';
     app.use(
         //Este middleware simula que se ha loggeado un usuario
         //Este es el usuario que se utilizará en los métodos de la tienda. En el futuro se sustituirá con el proceso de login

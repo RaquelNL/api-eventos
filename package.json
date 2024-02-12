@@ -2,12 +2,13 @@
   "name": "clase",
   "version": "1.0.0",
   "description": "Clases de Node",
-  "main": "app.js",
+  "main": "./dist/app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/tsc -w",
-    "start": "./node_modules/.bin/nodemon ./dist/app.js",
+    "start": "node ./dist/app.js",
+    "develop": "./node_modules/.bin/nodemon ./dist/app.js",
     "sync": "rsync -avz --delete src/views/ dist/views/  && rsync -avz --delete src/public/ dist/public/",
     "mongo": "sudo mongod --config /usr/share/mongod/mongod.conf &"
   },
