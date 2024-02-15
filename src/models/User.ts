@@ -61,7 +61,7 @@ export class User {
     }
     async getCart(){
         const prodIds = this.cart.map( ci => ci.pid );
-        const products = await collections.products?.find({_id:{$in: prodIds}}).toArray();
+        const products = await collections.events?.find({_id:{$in: prodIds}}).toArray();
         return products?.map( p => {
             const qty = this.cart.find( ci => p._id.toHexString() === ci.pid.toHexString() )?.qty;
             return {
@@ -97,13 +97,13 @@ export class User {
     };
     async addOrder(){
         if(this.cart.length > 0 && this._id){
-            const prodsId = this.cart.map( ci => ci.pid ); //Listado de todos los ids de los productos que tengo en el cart
-            const products = await collections.products?.find({_id: {$in: prodsId}}).toArray();
-            if(products){
-                const items = products.map( p => {
+            const eventsId = this.cart.map( ci => ci.pid ); //Listado de todos los ids de los productos que tengo en el cart
+            const events = await collections.events?.find({_id: {$in: eventsId}}).toArray();
+            if(events){
+                const items = events.map( e => {
                     return {
-                        product: p,
-                        qty: this.cart.find( ci => ci.pid.toHexString() === p._id.toHexString())!.qty
+                        event: e,
+                        qty: this.cart.find( ci => ci.pid.toHexString() === e._id.toHexString())!.qty
                     }
                 }) 
             

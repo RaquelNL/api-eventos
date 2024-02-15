@@ -1,17 +1,13 @@
 import { Router } from "express";
-
-//import {  getEditProduct, getProducts, postAddProduct, postEditProduct } from "../controllers/adminCtrl.js";
-import { getProducts, getAddProduct, postAddProduct, getEditProduct, postEditProduct } from "../controllers/adminCtrl.js";
+import { getEvents, getAddEvent, postAddEvent, getEditEvent, postEditEvent, postDeleteEvent } from "../controllers/adminCtrl.js";
 
 export const adminRouter = Router();
 
+// Todas las rutas que llegan aquí empiezan por /admin
 
-
-//todas las rutas que llegan aquí empiezan por /admin
-
-adminRouter.get('/products',getProducts);
-adminRouter.get('/add-product',getAddProduct); //GET para presentar el formulario
-adminRouter.post('/add-product',postAddProduct); //POST para recibir los datos del formulario
-adminRouter.get('/add-product/:productId', getEditProduct);
-adminRouter.post('/edit-product',postEditProduct);
-//adminRouter.post('/delete-product') - Delete item - Ruta para eliminar un producto
+adminRouter.get('/events', getEvents);
+adminRouter.get('/add-event', getAddEvent); // GET para presentar el formulario
+adminRouter.post('/add-event', postAddEvent); // POST para recibir los datos del formulario
+adminRouter.get('/edit-event/:eventId', getEditEvent); // GET para obtener el formulario de edición de evento
+adminRouter.post('/edit-event/:eventId', postEditEvent); // POST para procesar la edición de evento
+adminRouter.post('/delete-event/:eventId', postDeleteEvent); // POST para eliminar un evento

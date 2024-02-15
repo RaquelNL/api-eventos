@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Product } from "../models/Product.js";
+import { Event } from "../models/Event.js";
 import { User } from "../models/User.js";
 
 
@@ -9,21 +9,21 @@ export const getIndex = (req: Request,res: Response,next: NextFunction) => {
     res.render('shop/index', {pageTitle:'Tienda', path:'/'});
 };
 
-export const getProducts = async (req: Request,res: Response,next: NextFunction) => {  
-    res.render('shop/product-list', 
+export const getEvents = async (req: Request,res: Response,next: NextFunction) => {  
+    res.render('shop/event-list', 
     {
-        pageTitle:'Listducta Productos', 
-        path:'/products', 
-        prods: await Product.fetchAll()
+        pageTitle:'Lista Eventos', 
+        path:'/events', 
+        events: await Event.fetchAll()
     });
 };  
 
-export const getProductById = async (req: Request,res: Response,next: NextFunction) => { 
-    const productId = req.params.productId; 
-    console.log(productId)
-    const product = await Product.findById(productId);
-    if(product){
-         res.render('shop/product-detail', {pageTitle:product.title, path:'', product: product});
+export const getEventById = async (req: Request,res: Response,next: NextFunction) => { 
+    const eventId = req.params.eventId; 
+    console.log(eventId)
+    const event = await Event.findById(eventId);
+    if(event){
+         res.render('shop/event-detail', {pageTitle:event.title, path:'', event: event});
      }else{
          res.status(404).render('404.ejs',{pageTitle: 'Producto No Encontrado',path:''});    
      }
@@ -40,20 +40,20 @@ export const getCart = async (req: Request,res: Response,next: NextFunction)=>{
 }
 
 
-export const postCart = async (req: Request,res: Response,next: NextFunction)=>{
+export const postCart = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.body.user;
-    const productId = req.body.productId;
-    await user.addToCart(productId);
+    const eventId = req.body.eventId; 
+    await user.addToCart(eventId);
 
-    console.log('postCart: Añadimos al carro el producto: ',productId);
-    //Cart.addProduct(productId,1);
+    console.log('postCart: Añadimos al carro el evento: ', eventId);
     res.redirect('/cart');
 }
 
+
 export const deleteCartItem = async (req: Request,res: Response,next: NextFunction)=>{
     const user = req.body.user;
-    const productId = req.body.productId;
-    const result = await user.deleteCartItem(productId);
+    const eventId = req.body.eventId;
+    const result = await user.deleteCartItem(eventId);
     
     res.redirect('/cart');
 }
@@ -61,15 +61,15 @@ export const deleteCartItem = async (req: Request,res: Response,next: NextFuncti
 
 export const postCartIncreaseItem = async (req: Request,res: Response,next: NextFunction)=>{
     const user = req.body.user;
-    const productId = req.body.productId;
-    await user.addToCart(productId);
+    const eventId = req.body.eventId;
+    await user.addToCart(eventId);
     res.redirect('/cart');
 };
 
 export const postCartDecreaseItem = async (req: Request,res: Response,next: NextFunction)=>{
     const user = req.body.user;
-    const productId = req.body.productId;
-    await user.decreaseCartItem(productId);
+    const eventId = req.body.eventId;
+    await user.decreaseCartItem(eventId);
     res.redirect('/cart');
 };
 export const getOrders = async (req: Request,res: Response,next: NextFunction)=>{

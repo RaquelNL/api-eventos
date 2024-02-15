@@ -1,70 +1,81 @@
 import { Request,Response, NextFunction } from "express";
 
-import { Product } from "../models/Product.js";
+import { Event } from "../models/Event.js";
 
 
-export const getProducts = async (req: Request,res:Response) => {  
-    res.render('admin/products', {
-        pageTitle:'Admin Products', 
-        path:'/admin/products', 
-        prods: await Product.fetchAll()});
+export const getEvents = async (req: Request,res:Response) => {  
+    res.render('admin/events', {
+        pageTitle:'Admin Events', 
+        path:'/admin/events', 
+        prods: await Event.fetchAll()});
 };
 
-export const getAddProduct = (req: Request,res: Response,next: NextFunction)=>{
-    console.log("Devolvemos el formulario para meter productos");
-    res.render('admin/edit-product',{pageTitle: "Formulario", path: "/admin/add-product", editing: false});
+export const getAddEvent = (req: Request,res: Response,next: NextFunction)=>{
+    console.log("Devolvemos el formulario para meter eventos");
+    res.render('admin/edit-event',{pageTitle: "Formulario", path: "/admin/add-event", editing: false});
 };
-export const postAddProduct = async (req: Request, res: Response, next: NextFunction) => {
+export const postAddEvent = async (req: Request, res: Response, next: NextFunction) => {
     const title = req.body.title;
     const imageUrl =  req.body.imageUrl;
     const description = req.body.description;
     console.log(description);
     const price = +req.body.price;
     if(req.body.title){
-        const producto = new Product(
+        const event = new Event(
             title,
             imageUrl,
             description,
             price
         );
-        await producto.save();
+        await event.save();
     }
-    res.redirect('/products');
+    res.redirect('/events');
 }
 
 
-export const getEditProduct = async (req: Request,res: Response,next: NextFunction)=>{
-    console.log("getEdtitProduct: Devolvemos el formulario para editar productos");
+export const getEditEvent = async (req: Request,res: Response,next: NextFunction)=>{
+    console.log("getEdtitEvent: Devolvemos el formulario para editar eventos");
     const editMode = req.query.edit === 'true';
     if(!editMode){
-        return res.redirect('/products');
+        return res.redirect('/events');
     }
-    const productId = req.params.productId;
-    const product = await Product.findById(productId);
-    if(product){
-        res.render('admin/edit-product',
+    const eventId = req.params.eventId;
+    const event = await Event.findById(eventId);
+    if(event){
+        res.render('admin/edit-event',
         {
             pageTitle: "Formulario edición", 
-            path: "/admin/add-product", //Ebtrada de la barra de navegación que vamos a sombrear    
+            path: "/admin/add-event", //Ebtrada de la barra de navegación que vamos a sombrear    
             editing: editMode,
-            product: product
+            event: event
         });
     }else{
-        res.redirect('/products');
+        res.redirect('/events');
     }
 };
-export const postEditProduct = async (req: Request,res: Response,next: NextFunction)=>{
-    const productId = req.body.productId;
+export const postEditEvent = async (req: Request,res: Response,next: NextFunction)=>{
+    const eventId = req.body.eventId;
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const price =  +req.body.price;
-    const product = new Product(title, imageUrl, description, price, productId);
-    console.log(product);
-    await product.save();
-    res.redirect('/admin/products');
+    const event = new Event(title, imageUrl, description, price, eventId);
+    console.log(event);
+    await event.save();
+    res.redirect('/admin/events');
 }
-//export const postDeleteProduct //Controller para elimnar un producto
 
+
+export const postDeleteEvent = async (req: Request, res: Response, next: NextFunction) => {
+    const eventId = parseInt(req.params.eventId); // Convertir la cadena a número
+    try {
+        await Event.deleteById(eventId); 
+        res.redirect('/admin/events'); 
+    } catch (error) {
+        console.error("Error al eliminar el evento:", error);
+        res.redirect('/admin/events'); 
+    }
+
+}
 
 

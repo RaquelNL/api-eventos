@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
 
-import { Product } from "./Product.js";
+import { Event } from "./Event.js";
 import { User } from "./User.js";
 
 export interface OrderItem {
-    product: Product,
+    event: Event,
     qty: number
 }
 
